@@ -1,0 +1,8 @@
+Language:   C       shell     Python     SQL
+System:     AIX     CentOS    debian     FreeBSD OpenBSD
+Database:   Oracle  MySQL     PostgreSQL Redis MongoDB
+Cluster:    K8S     OpenStack Hadoop
+            RHCS    HeartBeat LVS        KeepAlive
+Program:    Nginx   Apache    tomcat     RabbitMQ tuxedo
+Inspection: Ansible Zabbix    nagios
+Tools:      vim     VScode
