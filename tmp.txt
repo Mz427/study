@@ -1,1 +1,2 @@
 git@github.com:Mz427/learning_log_django.git
+magnet:?xt=urn:btih:5108d4c722015ca8186604636838e61798facf8d&website=bt%E5%A4%A9%E5%A0%82www.jsr9.com
