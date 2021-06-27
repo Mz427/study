@@ -12,10 +12,10 @@ echo ${myarray[2]}
 echo ${myarray[@]}
 
 #關聯数組
-typeset myarray
-capital["one"]="sdkjfdlksf"
-capital["two"]="sdkjf"
-capital["three"]="sdf"
+typeset -A myarray
+capital[one]="sdkjfdlksf"
+capital[two]="sdkjf"
+capital[three]="sdf"
 #取出所有鍵
 ${!myarray[@]}
 
