@@ -3,15 +3,21 @@
 myname=vbird
 unset myname
 echo ${myname}
+
+#Declare array
+set -A myarray "a" "b" "c"
 myarray=(a b c d e)
-echo ${myarray[*]}
 echo ${myarray[2]}
+#echo ${myarray[*]}
+echo ${myarray[@]}
+
 #關聯数組
+typeset myarray
 capital["one"]="sdkjfdlksf"
 capital["two"]="sdkjf"
 capital["three"]="sdf"
-
-$(date "+%Y%m%d") #Equit `date "+%Y%m%d`
+#取出所有鍵
+${!myarray[@]}
 
 #test命令是shell环境中测试条件表达式的实用工具。
 test n1 -[eq][ge][gt][le][lt][ne] n2 #Test number.
