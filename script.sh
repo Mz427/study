@@ -333,3 +333,7 @@ date -d "1 day ago" "+%Y%m%d %H:%M:%S"
 date -s "20120528 10:56:34"
 #批量修改文件名称
 rename 's/\.jpg$/\.png/' *.jpg
+#更新locate数据庫
+/etc/weekly #Script that starts the database rebuild.
+/usr/libexec/locate.updatedb #Script to update the locate database.
+/var/db/locate.database #Locate databas.
