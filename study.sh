@@ -1,9 +1,13 @@
 Language:   C       shell     Python     SQL
-            HTML5   CSS       JS         node.js         angular
+            HTML5   CSS       JS
+            #开发框架
+            node.js angular   django
 System:     AIX     CentOS    debian     FreeBSD OpenBSD
-Database:   Oracle  MySQL     PostgreSQL Redis MongoDB
+Database:   Oracle  MySQL     PostgreSQL MongoDB Redis
 Cluster:    K8S     OpenStack Hadoop
             RHCS    HeartBeat LVS        KeepAlive
-Program:    Nginx   Apache    tomcat     RabbitMQ tuxedo
+Program:    Nginx   Apache    tomcat
+            #中间件
+            RabbitMQ/kafka/tuxedo
 Inspection: Ansible Zabbix    nagios
 Tools:      vim     VScode    terminal   git/github
