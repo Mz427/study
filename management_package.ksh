@@ -1,21 +1,24 @@
 #Debian
 #/etc/apt/sources.list
-	apt-get update #Update database of system package.
+	apt-get update             #Update database of system package.
 		upgrade [package_name] #Update version of package.
-		dist-upgrade #Update Debian system.
+		dist-upgrade           #Update Debian system.
 		install
 		reinstall
 		remove
-		autoremove #Remove both dependence package indeed.
-		purge #Equit "apt-get remove package_name --purge", remove both package and config file.
+		autoremove             #Remove both dependence package indeed.
+		purge                  #Equit "apt-get remove package_name --purge", remove both package and config file.
 		clean
 		download
+    apt-cache search
+    apt list [package_name]    #List installed package.
+    dpkg -l                    #List installed package.
 
 #RPM linux
 #/etc/yum.repos.d/
 	yum list installed
 	         available
-		 updates
+		updates
 	    install
 	    reinstall
 	    localinstall
