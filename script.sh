@@ -86,11 +86,14 @@ fi
 case variable in
 pattern1 | pattern2)
 	cmd
-	cmd;;
+	cmd
+;;
 pattern3)
-	cmd;;
+	cmd
+;;
 *)
-	cmd;;
+	cmd
+;;
 esac
 
 #FOR
@@ -98,6 +101,7 @@ for expression
 do
 	cmd
 	if cmd
+    then
 		break [n]
 		[continue]
 	fi
@@ -127,7 +131,9 @@ func_name parameter1 parameter2 ...
 ${#} #Amount of paramters.
 ${*} #All paramters as a string.
 ${@} #All paramters as ${#} strings.
+#移动参数位置
 shift
+#处理参数
 getopts
 
 ####################################### REDIRECT #######################################
@@ -322,5 +328,8 @@ expr1|expr2     匹配expr1或expr2
 
 #######################################  commands  #######################################
 
+#输出及修改时间
 date -d "1 day ago" "+%Y%m%d %H:%M:%S"
 date -s "20120528 10:56:34"
+#批量修改文件名称
+rename 's/\.jpg$/\.png/' *.jpg
