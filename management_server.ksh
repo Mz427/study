@@ -1,4 +1,6 @@
-############################## UNIX System V #############################
+##########################################################################
+#                              UNIX System V
+##########################################################################
 #Server Script is in:
 	/etc/init.d/daemon.script
 	/etc/rc.d/rc[0-6].d/S__daemon--->/etc/init.d/daemon.script
@@ -19,7 +21,9 @@
 	stand alone
 	super daemon # managed by inetd: /etc/inetd.conf.
 
-################################# Systemd ################################
+##########################################################################
+#                               Systemd
+##########################################################################
 #Unit Script is in:
 	/usr/lib/systemd/system/unit.service #Like /etc/init.d/daemon.script
 	/run/systemd/system/
@@ -52,3 +56,10 @@
 	systemctl get-default
 	systemctl set-default daemon.target
 	systemctl isolate daemon.target
+
+##########################################################################
+#                            Systemd-units
+##########################################################################
+    hostnamectl
+#systemd-networkd.service:
+    networkctl
