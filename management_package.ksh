@@ -11,8 +11,8 @@
 		clean
 		download
     apt-cache search
-    apt list [package_name]    #List installed package.
-    dpkg -l                    #List installed package.
+    apt list [-installed][-upgradeable] [package_name]    #List installed package.
+    dpkg -l                                               #List installed package.
 
 #RPM linux
 #/etc/yum.repos.d/
