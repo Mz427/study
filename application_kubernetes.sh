@@ -26,7 +26,6 @@ apt-get install curl
 apt-get install gnupg
 apt-get install apt-transport-https
 apt-get install ca-certificates
-apt-get install curl
 
 #Update apt source list.
 #Backup source configuration file:

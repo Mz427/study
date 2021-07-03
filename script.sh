@@ -269,7 +269,11 @@ sed '=' file.txt
 #Option l:
 #Print \t.
 sed -n 'l' file.txt
-#Option for more than one lines: N, D, P:
+
+#Option for more than one lines:
+N:将数据流中的下一行加进来创建一个多行组(multiline group)来处理.
+D:删除多行组中的一行.
+P:打印多行组中的一行.
 
 #Hold space
 #Options:
