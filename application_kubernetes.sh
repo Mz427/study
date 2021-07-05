@@ -28,6 +28,16 @@ apt-get install apt-transport-https
 apt-get install ca-certificates
 
 #Update apt source list.
+#vi /etc/apt/source.list
+deb http://mirrors.aliyun.com/debian/ buster main
+deb-src http://mirrors.aliyun.com/debian/ buster main
+deb http://mirrors.aliyun.com/debian-security buster/updates main
+deb-src http://mirrors.aliyun.com/debian-security buster/updates main
+deb http://mirrors.aliyun.com/debian/ buster-updates main
+deb-src http://mirrors.aliyun.com/debian/ buster-updates main
+#vi /etc/apt/source.list.d/kubernetes.list
+deb  https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+
 #Backup source configuration file:
 cp /etc/apt/sources.list /etc/apt/source.list.bak
 #Download the Google Cloud public signing key:

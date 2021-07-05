@@ -60,6 +60,7 @@
 ##########################################################################
 #                            Systemd-units
 ##########################################################################
-    hostnamectl
+#Set hostname.
+    hostnamectl set-hostname hostname
 #systemd-networkd.service:
     networkctl

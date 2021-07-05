@@ -341,3 +341,6 @@ rename 's/\.jpg$/\.png/' *.jpg
 /etc/weekly #Script that starts the database rebuild.
 /usr/libexec/locate.updatedb #Script to update the locate database.
 /var/db/locate.database #Locate databas.
+#生成井發送ssh密鈅.
+ssh-keygen -t ed25519
+ssh-copy-id user_id@ip

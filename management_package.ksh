@@ -1,5 +1,6 @@
 #Debian
 #/etc/apt/sources.list
+#/etc/apt/sources.list.d/
 	apt-get update             #Update database of system package.
 		upgrade [package_name] #Update version of package.
 		dist-upgrade           #Update Debian system.
