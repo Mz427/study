@@ -50,17 +50,23 @@
 #Manage unit:
 	systemctl #List all started units.
 	systemctl list-unit-file [unit] #List all installed units.
-	systemctl list-units [--type=service] [--all] #List specific type of units.
+    systemctl list-units [--type=service] [--all] #List specific type of units(active).
 	systemctl list-dependencies [unit] [--reverse]
 	systemctl list-sockets
 	systemctl get-default
 	systemctl set-default daemon.target
-	systemctl isolate daemon.target
+	systemctl isolate daemon.target #Switch target.
+#重启/關機:
+    systemctl [reboot] [poweroff]
 
 ##########################################################################
 #                            Systemd-units
 ##########################################################################
-#Set hostname.
-    hostnamectl set-hostname hostname
+#Log:
+    journalctl #List all log.   
+    journalctl [-n 200][-f] #Like tail.
+
 #systemd-networkd.service:
     networkctl
+#Set hostname.
+    hostnamectl set-hostname hostname
