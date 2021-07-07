@@ -9,5 +9,5 @@ Cluster:    K8S     OpenStack Hadoop
 Program:    Nginx   Apache    tomcat
             #中间件
             RabbitMQ/kafka/tuxedo
-Inspection: Ansible Zabbix    nagios
+Inspection: Ansible Zabbix    nagios     cobbler
 Tools:      vim     VScode    terminal   git/github
