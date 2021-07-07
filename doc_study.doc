@@ -1,7 +1,7 @@
 Language:   C       shell     Python     SQL
             HTML5   CSS       JS
             #开发框架
-            node.js angular   django
+            node.js angular   django     CI/CD   DevOps
 System:     AIX     CentOS    debian     FreeBSD OpenBSD
 Database:   Oracle  MySQL     PostgreSQL MongoDB Redis
 Cluster:    K8S     OpenStack Hadoop
