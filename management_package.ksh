@@ -11,7 +11,8 @@
 		purge                  #Equit "apt-get remove package_name --purge", remove both package and config file.
 		clean
 		download
-    apt-cache search
+    apt-cache search 
+              madison
     apt list [-installed][-upgradeable] [package_name]    #List installed package.
     dpkg -l                                               #List installed package.
 

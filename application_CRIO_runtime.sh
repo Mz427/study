@@ -19,9 +19,12 @@ sudo sysctl --system
 
 #If installing cri-o-runc (recommended), you'll need to install libseccomp >= 2.4.1.
 #This is not available in distros based on Debian buster or below, so buster backports will need to be enabled:
-echo 'deb http://deb.debian.org/debian buster-backports main' > /etc/apt/sources.list.d/backports.list
+#echo 'deb http://deb.debian.org/debian buster-backports main' > /etc/apt/sources.list.d/backports.list
+echo 'deb http://mirrors.aliyun.com/debian buster-backports main' > /etc/apt/sources.list.d/backports.list
 apt update
-apt install -y libseccomp2 || apt update -y libseccomp2
+apt-cache madison libseccomp2
+apt install libseccomp2=2.4.4-1~bpo10+1
+#apt install -y libseccomp2 || apt update -y libseccomp2
 
 #Install cri-o and cri-o-runc:
 export OS=Debian_Unstable
@@ -39,7 +42,7 @@ curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/
 apt-get update
 apt-get install cri-o cri-o-runc
 
-cat <<EOF | sudo tee etc/crio/crio.conf.d/02-cgroup-manager.conf
+cat <<EOF | sudo tee /etc/crio/crio.conf.d/02-cgroup-manager.conf
 [crio.runtime]
 conmon_cgroup = "pod"
 cgroup_manager = "cgroupfs"
