@@ -1,5 +1,5 @@
 #####################################################################################################################
-#
+#                                         Kubernetes cluster
 #####################################################################################################################
 #Kubernetes consists of blow module:
 #Control-plane node(s):
@@ -15,42 +15,61 @@ TCP	        Inbound	    10250	    kubelet API	            Self, Control plane
 TCP	        Inbound	    30000-32767	NodePort Services       All
 
 #####################################################################################################################
-#
+#                                          Install step
 #####################################################################################################################
 #Install Kubernetes on debian10.
 #System required:
 2 CPU or more, disable SWAP, 2GB or more RAM.
-#Install tools required.
-apt-get update
-apt-get install curl
-apt-get install gnupg
-apt-get install apt-transport-https
-apt-get install ca-certificates
+#Disable swap:
+swapoff -a #Or edit /etc/fstab.
+#Edit kernel:
+cat << EOF | tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-arptables = 1
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
 
-#Update apt source list.
-#vi /etc/apt/source.list
+sysctl --system
+
+#Switch aliyun source:
+cp /etc/apt/source.list /etc/apt/source.list.backup
+cat << EOF | tee /etc/apt/source.list
 deb http://mirrors.aliyun.com/debian/ buster main
 deb-src http://mirrors.aliyun.com/debian/ buster main
 deb http://mirrors.aliyun.com/debian-security buster/updates main
 deb-src http://mirrors.aliyun.com/debian-security buster/updates main
 deb http://mirrors.aliyun.com/debian/ buster-updates main
 deb-src http://mirrors.aliyun.com/debian/ buster-updates main
-#vi /etc/apt/sources.list.d/kubernetes.list
-deb  https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+EOF
+#Add kubernetes source:
+cat << EOF | tee /etc/apt/sources.list.d/kubernetes.list
+deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+EOF
+#Google kubernetes source:
+#deb http://apt.kubernetes.io/ kubernetes-xenial main
 
+#Install tools required:
+apt-get update
+apt-get install curl
+apt-get install gnupg
+apt-get install apt-transport-https
+apt-get install ca-certificates
+
+#Download the signing key:
 curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
-
-#Backup source configuration file:
-cp /etc/apt/sources.list /etc/apt/source.list.bak
-#Download the Google Cloud public signing key:
-curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-#Add the Kubernetes apt repository:
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" \
-    | sudo tee /etc/apt/sources.list.d/kubernetes.list
-#Add aliyun source:
-#printf "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" >> /etc/apt/source.list
+#Google source signing key:
+#curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 #Update apt package index with the new repository and install kubectl:
 sudo apt-get update
 sudo apt-get install -y kubectl
 sudo apt-get install -y kubeadm [kubelet]
+
+#####################################################################################################################
+#                                          Setup cluster
+#####################################################################################################################
+#Create the actual cluster:
+#k8s.gcr.io
+crictl pull coredns/coredns:1.8.0
+kubeadm init --pod-network-cidr=10.9.7.0/24 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version=v1.21.2
