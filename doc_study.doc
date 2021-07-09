@@ -1,13 +1,15 @@
 Language:   C       shell     Python     SQL
             HTML5   CSS       JS
             #开发框架
-            node.js angular   django     CI/CD   DevOps
-System:     AIX     CentOS    debian     FreeBSD OpenBSD
-Database:   Oracle  MySQL     PostgreSQL MongoDB Redis
+            node.js angular   django     CI/CD     DevOps
+System:     AIX     CentOS    debian     FreeBSD   OpenBSD
+Database:   Oracle  MySQL     PostgreSQL MongoDB   Redis
 Cluster:    K8S     OpenStack Hadoop
-            RHCS    HeartBeat LVS        KeepAlive
+            RHCS    HeartBeat LVS/dr     KeepAlive HAProxy
 Program:    Nginx   Apache    tomcat
             #中间件
-            RabbitMQ/kafka/tuxedo
+            RabbitMQ/tuxedo
+            #日志系统
+            flume/kafka
 Inspection: Ansible Zabbix    nagios     cobbler
 Tools:      vim     VScode    terminal   git/github

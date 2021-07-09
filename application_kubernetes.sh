@@ -72,4 +72,14 @@ sudo apt-get install -y kubeadm [kubelet]
 #Create the actual cluster:
 #k8s.gcr.io
 crictl pull coredns/coredns:1.8.0
-kubeadm init --pod-network-cidr=10.9.7.0/24 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version=v1.21.2
+
+#Init kubernetes cluster:
+kubeadm config print init-defaults > kubeadm.yaml
+kubeadm init --config=kubeadm.yaml
+#kubeadm init --pod-network-cidr=10.9.7.0/24 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version=v1.21.2
+mkdir -p ${HOME}/.kube
+cp -i /etc/kubernetes/admin.conf ${HOME}/.kube/config
+chown $(id -u):$(id -g) ${HOME}/.kube/config
+kubeadm config print join-defaults > kubeadm.yaml
+kubeadm join
+#Install network plugin:
