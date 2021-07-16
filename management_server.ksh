@@ -8,6 +8,7 @@
 	/etc/init.d/daemon.scritp start/stop/restart/status
 	server daemon             start/stop/restart/status
 #Set if start server when boot:
+	chkconfig --add daemon 
 	chkconfig [--level runlevel] daemon on/off
 	chkconfig --list daemon 
     #Or edit config file.
