@@ -1,6 +1,6 @@
 #For Debian.
 #Create the .conf file to load the modules at bootup:
-cat <<EOF | tee /etc/modules-load.d/crio.conf
+cat << EOF | tee /etc/modules-load.d/crio.conf
 overlay
 br_netfilter
 EOF
@@ -20,28 +20,25 @@ sysctl --system
 
 #Install tools required:
 apt-get update
-apt-get install curl
-apt-get install gnupg
-apt-get install apt-transport-https
-apt-get install ca-certificates
+apt-get install curl gnupg apt-transport-https ca-certificates
 
 #If installing cri-o-runc (recommended), you'll need to install libseccomp >= 2.4.1.
 #This is not available in distros based on Debian buster or below, so buster backports will need to be enabled:
-printf 'deb http://mirrors.aliyun.com/debian buster-backports main' > /etc/apt/sources.list.d/backports.list
+printf 'deb http://mirrors.aliyun.com/debian buster-backports main\n' > /etc/apt/sources.list.d/backports.list
 #echo 'deb http://deb.debian.org/debian buster-backports main' > /etc/apt/sources.list.d/backports.list
 #Add cri-o source:
 export OS=Debian_Unstable
 export VERSION=1.21
 
-cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+cat << EOF | tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /
 EOF
-cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.list
+cat << EOF | tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.list
 deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /
 EOF
 
-curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
-curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
+curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
+curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
 
 apt update
 apt-cache madison libseccomp2
