@@ -26,5 +26,13 @@ nq    永不排队 #无需队列, 如果有realserver的连接数为0就直接�
 lblc  基于局部性的最少连接调度算法 #这个算法是请求数据包的目标IP地址的一种调度算法, 该算法先根据请求的目标IP地址寻找最近的该目标IP地址所有使用的服务器, 如果这台服务器依然可用, 并且有能力处理该请求, 调度器会尽量选择相同的服务器, 否则会继续选择其它可行的服务器.
 lblcr 复杂的基于局部性最少的连接算法 #记录的不是要给目标IP与一台服务器之间的连接记录, 它会维护一个目标IP到一组服务器之间的映射关系, 防止单点服务器负载过高。.
 
+cat << EOF | tee /etc/modules-load.d/ipvs.conf
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+nf_conntrack
+EOF
+
 #ipvsadm
 #/etc/keepalived/keepalived.conf

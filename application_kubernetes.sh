@@ -29,7 +29,6 @@ net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
-
 sysctl --system
 
 #Switch aliyun source:
@@ -50,11 +49,7 @@ EOF
 #deb http://apt.kubernetes.io/ kubernetes-xenial main
 
 #Install tools required:
-apt-get update
-apt-get install curl
-apt-get install gnupg
-apt-get install apt-transport-https
-apt-get install ca-certificates
+apt-get update curl gnupg apt-transport-https ca-certificates
 
 #Download the signing key:
 curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
@@ -63,8 +58,7 @@ curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 
 #Update apt package index with the new repository and install kubectl:
 sudo apt-get update
-sudo apt-get install -y kubectl
-sudo apt-get install -y kubeadm [kubelet]
+sudo apt-get install -y kubectl kubeadm [kubelet]
 
 #####################################################################################################################
 #                                          Setup cluster
@@ -75,6 +69,7 @@ crictl pull coredns/coredns:1.8.0
 
 #Init kubernetes cluster:
 kubeadm config print init-defaults > kubeadm.yaml
+kubeadm config images list [--kubernetes-version <version>]
 kubeadm init --config=kubeadm.yaml
 #kubeadm init --pod-network-cidr=10.9.7.0/24 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version=v1.21.2
 mkdir -p ${HOME}/.kube
