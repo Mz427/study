@@ -1,21 +1,11 @@
 #For Debian.
 #Create the .conf file to load the modules at bootup:
-cat << EOF | tee /etc/modules-load.d/crio.conf
-overlay
-br_netfilter
-EOF
-
+printf 'overlay\nbr_netfilter\n' > /etc/modules-load.d/crio.conf
 modprobe overlay
 modprobe br_netfilter
 
 #Set up required sysctl params, these persist across reboots:
-cat << EOF | tee /etc/sysctl.d/99-kubernetes-cri.conf
-net.bridge.bridge-nf-call-arptables = 1
-net.bridge.bridge-nf-call-iptables  = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward                 = 1
-EOF
-
+printf 'net.bridge.bridge-nf-call-arptables = 1\nnet.bridge.bridge-nf-call-iptables  = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nnet.ipv4.ip_forward = 1\n' > /etc/sysctl.d/99-kubernetes-cri.conf
 sysctl --system
 
 #Install tools required:
@@ -30,15 +20,11 @@ printf 'deb http://mirrors.aliyun.com/debian buster-backports main\n' > /etc/apt
 export OS=Debian_Unstable
 export VERSION=1.21
 
-cat << EOF | tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /
-EOF
-cat << EOF | tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.list
-deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /
-EOF
+printf "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/${VERSION}/${OS}/ /\n" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.list
+printf "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/${OS}/ /\n" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 
-curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
-curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
+curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/${OS}/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
+curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/${OS}/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
 
 apt update
 apt-cache madison libseccomp2
@@ -49,11 +35,7 @@ apt-get update
 apt-get install cri-o cri-o-runc
 
 #CRI-O uses the systemd cgroup driver per default. To switch to the cgroupfs cgroup driver:
-cat << EOF | tee /etc/crio/crio.conf.d/02-cgroup-manager.conf
-[crio.runtime]
-conmon_cgroup = "pod"
-cgroup_manager = "cgroupfs"
-EOF
+printf '[crio.runtime]\nconmon_cgroup = "pod"\ncgroup_manager = "cgroupfs"\n' > /etc/crio/crio.conf.d/02-cgroup-manager.conf
 
 #Start cri-o service:
 systemctl daemon-reload
