@@ -32,8 +32,8 @@ EOF
 sysctl --system
 
 #Switch aliyun source:
-cp /etc/apt/source.list /etc/apt/source.list.backup
-cat << EOF | tee /etc/apt/source.list
+cp /etc/apt/sources.list /etc/apt/sources.list.backup
+cat << EOF | tee /etc/apt/sources.list
 deb http://mirrors.aliyun.com/debian/ buster main
 deb-src http://mirrors.aliyun.com/debian/ buster main
 deb http://mirrors.aliyun.com/debian-security buster/updates main
@@ -57,8 +57,8 @@ curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 #curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 #Update apt package index with the new repository and install kubectl:
-sudo apt-get update
-sudo apt-get install -y kubectl kubeadm [kubelet]
+apt-get update
+apt-get install -y kubectl kubeadm [kubelet]
 
 #####################################################################################################################
 #                                          Setup cluster
@@ -70,6 +70,14 @@ crictl pull coredns/coredns:1.8.0
 #Init kubernetes cluster:
 kubeadm config print init-defaults > kubeadm.yaml
 kubeadm config images list [--kubernetes-version <version>]
+#podman pull registry.aliyuncs.com/google_containers/kube-apiserver:v1.21.3
+#podman pull registry.aliyuncs.com/google_containers/kube-controller-manager:v1.21.3
+#podman pull registry.aliyuncs.com/google_containers/kube-scheduler:v1.21.3
+#podman pull registry.aliyuncs.com/google_containers/kube-proxy:v1.21.3
+#podman pull registry.aliyuncs.com/google_containers/pause:3.4.1
+#podman pull registry.aliyuncs.com/google_containers/etcd:3.4.13-0
+#podman pull coredns/coredns:v1.8.0
+
 kubeadm init --config=kubeadm.yaml
 #kubeadm init --pod-network-cidr=10.9.7.0/24 --image-repository registry.aliyuncs.com/google_containers --kubernetes-version=v1.21.2
 mkdir -p ${HOME}/.kube
