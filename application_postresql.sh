@@ -97,8 +97,8 @@ maintainers so that we can update this file for future versions.
 
 Upgrade Howto (for a major upgrade)
 ===================================
-If you didn't install PostgreSQL by following this README,
-you must adapt these instructions to your setup.
+#If you didn't install PostgreSQL by following this README,
+#you must adapt these instructions to your setup.
 
 Option 1: Dump and Restore
 --------------------------
@@ -178,7 +178,7 @@ Examine your old file for local changes and apply them to the new version.
     pg_upgrade -b /usr/local/bin/postgresql-9.6/ -B /usr/local/bin \
     -U postgres -d /var/postgresql/data-9.6/ -D /var/postgresql/data"
 
-8) Remove "local all postgres trust" line from pg_hba.conf
+8) Remove "local all postgres trust" line from pg_hba.conf"
 # su _postgresql -c "vi /var/postgresql/data/pg_hba.conf"
 
 9) Start PostgreSQL:
@@ -191,3 +191,10 @@ administration of a PostgreSQL database, two clients are notable:
 
 www/phppgadmin		A web based user interface that uses PHP5
 databases/pgadmin3	A graphical user interface that uses wxWidgets
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            trust
+hostssl mzdb            mz              samenet                 scram-sha-256
