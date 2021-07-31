@@ -13,6 +13,8 @@ ${parameter:+word}
 #parameter的值的子字符串。
 ${parameter:offset}
 ${parameter:offset:length}
+#从右算第offset到結尾length個字符.
+${parameter:0-offset:length}
 
 #${}带！有下面几种表达式：
 #将带有前缀为prefix的参数名打印出来
