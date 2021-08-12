@@ -36,7 +36,7 @@ test 表达式1 !  表达式2 #条件求反
 test –n 字符串         #字符串的长度非零
 test –z 字符串         #字符串的长度是否为零
 test 字符串1＝字符串2  #字符串是否相等，若相等返回true
-test 字符串1!＝字符串2 #字符串是否不等，若不等反悔false
+test 字符串1!＝字符串2 #字符串是否不等，若不等反悔true
 
 #判断整数
 test 整数1 -eq 整数2 #整数相等
@@ -231,7 +231,7 @@ function name([variables])
 
 #######################################   sed     #######################################
 
-[address][s][d][i][a][flags]
+[address][s][y][d][i][a][c][r][w][flags]
 sed [-n] [-e script] [-f file]
 
 #eq:
@@ -264,6 +264,7 @@ sed '/number 2/r data.txt' file.txt
 #Option y:
 sed 'y/abc/a1b1c1/'
 #Option =:
+sed '=' data2.txt | sed 'N; s/\n/ /'
 #Print line number.
 sed '=' file.txt
 #Option l:
