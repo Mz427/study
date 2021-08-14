@@ -1,29 +1,21 @@
-Firewall介绍
-firewalld是CentOS 7.0新推出的管理netfilter的用户空间软件工具
-firewalld是配置和监控防火墙规则的系统守护进程。可以实iptables,ip6tables,ebtables的功能
-firewalld服务由firewalld包提供
-firewalld支持划分区域zone,每个zone可以设置独立的防火墙规则
+#Firewall介绍
+#firewalld是CentOS 7.0新推出的管理netfilter的用户空间软件工具,firewalld服务由firewalld包提供
 
-相较于iptables防火墙而言，firewalld支持动态更新技术并加入了区域（zone）的概念。简单来说，区域就是firewalld预先准备了几套防火墙策略集合（策略模板），用户可以根据生产场景的不同而选择合适的策略集合，从而实现防火墙策略之间的快速切换。
+#firewalld支持划分区域zone,每个zone可以设置独立的防火墙规则.
+#firewalld中常用的区域名称及策略规则:
+    区域（noze） 默认策略规则
+    trusted	     允许所有的数据包进出
+    home         拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh、mdns、ipp-client、amba-client与dhcpv6-client服务相关，则允许进入
+    Internal     等同于home区域
+    work         拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh、ipp-client与dhcpv6-client服务相关，则允许进入
+    public       拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh、dhcpv6-client服务相关，则允许进入
+    external     拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh服务相关，则允许进入
+    dmz          拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh服务相关，则允许进入
+    block        拒绝进入的流量，除非与出去的流量相关
+    drop         拒绝进入的流量，除非与出去的流量相关
+#注意：firewalld默认出口是全放开的
 
-iptables每一个更改都需要先清除所有旧有的规则，然后重新加载所有的规则（包括新的和修改后的规则）；而firewalld任何规则的变更都不需要对整个防火墙规则重新加载。
-
-firewalld中常用的区域名称及策略规则
-
-区域（noze）	默认策略规则
-trusted	允许所有的数据包进出
-home	拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh、mdns、ipp-client、amba-client与dhcpv6-client服务相关，则允许进入
-Internal	等同于home区域
-work	拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh、ipp-client与dhcpv6-client服务相关，则允许进入
-public	拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh、dhcpv6-client服务相关，则允许进入
-external	拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh服务相关，则允许进入
-dmz	拒绝进入的流量，除非与出去的流量相关；而如果流量与ssh服务相关，则允许进入
-block	拒绝进入的流量，除非与出去的流量相关
-drop	拒绝进入的流量，除非与出去的流量相关
-注意：firewalld默认出口是全放开的
-
-Firewall 主要文件：
-
+#Firewall 主要文件:
 /etc/firewalld/		# 用户配置文件
 ├── firewalld.conf
 ├── helpers
@@ -34,51 +26,50 @@ Firewall 主要文件：
 └── zones
     ├── public.xml
     └── public.xml.old
-
 /usr/lib/firewalld # 系统配置文件，预定义配置
-firewalld有基于CLI（命令行界面）和基于GUI（图形用户界面)两种管理方式，即：firewall-cmd（终端管理工具）和firewall-config（图形管理工具）。
-
-如果要使用firewall-config需要安装：
-
+#firewalld有基于CLI（命令行界面）和基于GUI（图形用户界面)两种管理方式， 即：firewall-cmd（终端管理工具）
+#和firewall-config（图形管理工具）。
+#如果要使用firewall-config需要安装：
 yum -y install firewall-config
-firewall-cmd操作
-Status Options
-  --state             				 			# 返回并打印防火墙状态
-  --reload             							# 重新加载防火墙并保留状态信息
-  --complete-reload    							# 重新加载防火墙并丢失状态信息
-  --runtime-to-permanent						# 通过运行时配置创建永久文件
-  --check-config       							# 检查永久性配置是否有错误
 
-Log Denied Options
-  --get-log-denied    # 打印被拒绝的日志
-  --set-log-denied=<value>	# 设置日志拒绝值
+#firewall-cmd操作:
+Status Options:
+  --state             	 #返回并打印防火墙状态
+  --reload             	 #重新加载防火墙并保留状态信息
+  --complete-reload    	 #重新加载防火墙并丢失状态信息
+  --runtime-to-permanent #通过运行时配置创建永久文件
+  --check-config       	 #检查永久性配置是否有错误
 
-Automatic Helpers Options
-  --get-automatic-helpers		# 打印自动助手值
-  --set-automatic-helpers=<value>	 # 设置自动助手值
+Log Denied Options:
+  --get-log-denied         #打印被拒绝的日志
+  --set-log-denied=<value> #设置日志拒绝值
+
+Automatic Helpers Options:
+  --get-automatic-helpers         #打印自动助手值
+  --set-automatic-helpers=<value> #设置自动助手值
 
 Permanent Options
-  --permanent      # 永久设置一个选项（可用于标有[P]的选项）
+  --permanent #永久设置一个选项（可用于标有[P]的选项）
 
 Zone Options
-  --get-default-zone   # 打印连接和接口的默认区域
-  --set-default-zone=<zone>		# 设置默认区域
-  --get-active-zones   # 打印当前活动区域
-  --get-zones          # 打印预定义区域 [P]
-  --get-services       # 打印预定义的服务 [P]
-  --get-icmptypes      # 打印预定义的icmptypes [P]
-  --get-zone-of-interface=<interface>	# 打印接口绑定到的区域名称 [P]
-  --get-zone-of-source=<source>[/<mask>]|<MAC>|ipset:<ipset>	# 打印源绑定到的区域名称 [P]
-  --list-all-zones     # 列出为所有区域添加或启用的所有内容 [P]
-  --new-zone=<zone>    # 添加一个新区域 [P only]
-  --new-zone-from-file=<filename> [--name=<zone>]		# 从文件中添加具有可选名称的新区域 [P only]
-  --delete-zone=<zone> 	# 删除现有区域 [P only]
-  --load-zone-defaults=<zone>		# 加载区域默认设置 [P only] [Z]
-  --zone=<zone>        # 使用此区域设置或查询选项，否则使用默认区域 (可用于标有[Z]的选项)
-  --get-target         # 获取区域目标 [P only] [Z]
-  --set-target=<target>  # 设定区域目标 [P only] [Z]
-  --info-zone=<zone>   # 打印有关区域的信息
-  --path-zone=<zone>   # 打印区域的文件路径 [P only]
+  --get-default-zone                  #打印连接和接口的默认区域
+  --set-default-zone=<zone>	          #设置默认区域
+  --get-active-zones                  #打印当前活动区域
+  --get-zones                         #打印预定义区域 [P]
+  --get-services                      #打印预定义的服务 [P]
+  --get-icmptypes                     #打印预定义的icmptypes [P]
+  --get-zone-of-interface=<interface> #打印接口绑定到的区域名称 [P]
+  --get-zone-of-source=<source>[/<mask>]|<MAC>|ipset:<ipset> #打印源绑定到的区域名称 [P]
+  --list-all-zones                    #列出为所有区域添加或启用的所有内容 [P]
+  --new-zone=<zone>                   #添加一个新区域 [P only]
+  --new-zone-from-file=<filename> [--name=<zone>] # 从文件中添加具有可选名称的新区域 [P only]
+  --delete-zone=<zone> 	      #删除现有区域 [P only]
+  --load-zone-defaults=<zone> #加载区域默认设置 [P only] [Z]
+  --zone=<zone>               #使用此区域设置或查询选项，否则使用默认区域 (可用于标有[Z]的选项)
+  --get-target                #获取区域目标 [P only] [Z]
+  --set-target=<target>       #设定区域目标 [P only] [Z]
+  --info-zone=<zone>          #打印有关区域的信息
+  --path-zone=<zone>          #打印区域的文件路径 [P only]
 
 IPSet Options
   --get-ipset-types    # 打印支持的ipset类型
@@ -100,7 +91,7 @@ IPSet Options
   --ipset=<ipset> --add-entries-from-file=<entry> # 将新条目添加到ipset [P]
   --ipset=<ipset> --remove-entries-from-file=<entry>  # 从ipset中删除条目 [P]
 
- IcmpType Options
+IcmpType Options
   --new-icmptype=<icmptype>  # 添加新的icmptype [P only]
   --new-icmptype-from-file=<filename> [--name=<icmptype>] # 从具有可选名称的文件中添加新的icmptype [P only]
   --delete-icmptype=<icmptype> # 删除现有的icmptype [P only]
@@ -117,7 +108,7 @@ IPSet Options
   --icmptype=<icmptype> --get-destinations  #  列出icmptype中的目的地 [P only]
 
 
- Service Options
+Service Options
   --new-service=<service>  # 新增服务 [P only]
   --new-service-from-file=<filename> [--name=<service>] # 从文件中添加具有可选名称的新服务 [P only]
   --delete-service=<service>  # 删除现有服务 [P only]
@@ -149,7 +140,7 @@ IPSet Options
   --service=<service> --query-destination=<ipv>:<address>[/<mask>]   # 返回是否为服务设置了目标ipv [P only]
   --service=<service> --get-destinations   # 列出服务中的目的地 [P only]
 
-  Options to Adapt and Query Zones
+Options to Adapt and Query Zones
   --list-all           # 列出为区域添加或启用的所有内容 [P] [Z]
   --list-services      # 列出为区域添加的服务 [P] [Z]
   --timeout=<timeval>  # 启用timeval时间选项，其中timeval为一个数字，后跟字母“ s”或“ m”或“ h”之一,可用于标有[T]的选项
