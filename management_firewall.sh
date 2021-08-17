@@ -271,3 +271,37 @@ Panic Options
   --panic-on           # 启用紧急模式
   --panic-off          # 禁用紧急模式
   --query-panic        # 查询是否启用了应急模式
+
+
+########################################################################################################
+#                                                pf
+########################################################################################################
+rcctl {enable}{disable} pf
+pfctl [-e][-d]
+
+pfctl -f  /etc/pf.conf # Load the pf.conf file
+pfctl -nf /etc/pf.conf # Parse the file, but don't load it
+pfctl -sr              # Show the current ruleset
+pfctl -ss              # Show the current state table
+pfctl -si              # Show filter stats and counters
+pfctl -sa              # Show everything it can show
+
+#Macros
+ext_if = "fxp0"
+host1 = "192.168.1.1"
+host2 = "192.168.1.2"
+#List
+all_hosts = "{" $host1 $host2 "}"
+friends = "{ 192.168.1.1, 10.0.2.5, 192.168.43.53, 10.0.0.0/8, !10.1.2.3 }"
+#Table
+table <goodguys> { 192.0.2.0/24 }
+table <rfc1918>  const { 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8 }
+table <spammers> persist file "/etc/spammers"
+table <spammers> persist
+block in on fxp0 from { <rfc1918>, <spammers> } to any
+pass  in on fxp0 from <goodguys> to any
+
+#Rule syntax
+action [direction] [log] [quick] [on interface] [af] [proto protocol]
+       [from src_addr [port src_port]] [to dst_addr [port dst_port]]
+       [flags tcp_flags] [state]
