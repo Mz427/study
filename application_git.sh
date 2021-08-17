@@ -21,8 +21,11 @@ git merge branch_name
 #Get update from github.
 git fetch
 #Push upate to github branch.
-git push origin branch_name 
+git push origin branch_name
 
 #Update repository.
 git add changed_file
 git commit -m "messages"
+
+#Set default editor.
+git config --global core.editor "vim"
