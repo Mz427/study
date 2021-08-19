@@ -123,3 +123,39 @@ Options to Handle Bindings of Interfaces
     action [direction] [log] [quick] [on interface] [af] [proto protocol]
            [from src_addr [port src_port]] [to dst_addr [port dst_port]]
            [flags tcp_flags] [state]
+#	$OpenBSD: pf.conf,v 1.55 2017/12/03 20:40:04 sthen Exp $
+#
+# See pf.conf(5) and /etc/examples/pf.conf
+
+#Example of a router:
+if_int = "vether0"
+if_ext = "pppoe0"
+ip_windows = "10.9.7.72"
+table <ip_trusted> { 10.9.7.72 10.9.7.201 10.9.7.200 10.9.7.199 \
+	10.9.7.198 10.9.7.197 10.9.7.196 }
+table <martians> { 0.0.0.0/8 10.0.0.0/8 127.0.0.0/8 169.254.0.0/16 \
+    172.16.0.0/12 192.0.0.0/24 192.0.2.0/24 224.0.0.0/3            \
+    192.168.0.0/16 198.18.0.0/15 198.51.100.0/24 203.0.113.0/24 }
+
+set block-policy drop
+set loginterface egress
+set skip on lo
+
+#Set mtu of pppoe0
+match in all scrub (no-df random-id max-mss 1440)
+#configuring NAT
+match out on egress inet from !(egress:network) to any nat-to (egress:0)
+antispoof quick for { egress $if_int $if_ext }
+block in quick on egress from <martians> to any
+block return out quick on egress from any to <martians>
+#Allow SSH connection.
+block in quick on $if_int proto tcp from !$ip_windows to ($if_int) port ssh
+# By default, do not permit remote connections to X11
+block return in quick on ! lo0 proto tcp to port 6000:6010
+# Port build user does not need network
+block return out log quick proto {tcp udp} user _pbuild
+block all     #This will block all traffic on all interfaces in either direction from anywhere to anywhere.
+
+pass out on egress
+pass out on $if_int proto tcp from ($if_int) to $if_int:network port ssh
+pass in on $if_int from <ip_trusted> to any
