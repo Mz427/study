@@ -1,20 +1,23 @@
 ##########################################################################
 #                              UNIX System V
 ##########################################################################
-#Server Script is in:
+#Service Script is in:
 	/etc/init.d/daemon.script
 	/etc/rc.d/rc[0-6].d/S__daemon--->/etc/init.d/daemon.script
+    /etc/rc.d/service_script           #FreeBSD or OpenBSD
+    /usr/local/etc/rc.d/service_script #FreeBSD for package service_script
 #Control server:
 	/etc/init.d/daemon.scritp start/stop/restart/status
-	server daemon             start/stop/restart/status
+	service daemon            start/stop/restart/status
 #Set if start server when boot:
 	chkconfig --add daemon 
 	chkconfig [--level runlevel] daemon on/off
 	chkconfig --list daemon 
+    service enable/disable #FreeBSD
     #Or edit config file.
-    rc.conf               #FreeBSD
-    rc.conf/rc.conf.local #OpenBSD
-    inittab               #AIX
+    /etc/rc.conf                  #FreeBSD
+    /etc/rc.conf or rc.conf.local #OpenBSD
+    /etc/inittab                  #AIX
 
 #Change init level:
 	init [0-6]

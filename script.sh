@@ -345,3 +345,5 @@ rename 's/\.jpg$/\.png/' *.jpg
 #生成井發送ssh密鈅.
 ssh-keygen -t ed25519
 ssh-copy-id user_id@ip
+#Ssh測試端口
+ssh -v -p {port} {username@ip}
