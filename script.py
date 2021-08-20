@@ -1,3 +1,8 @@
+py[thon] --version
+py[thon] -m pip list #query installed packages.
+py[thon] -m pip --upgrade pip
+py[thon] -m pip install
+
 #String variable.
 string1="myname"
 string2=string1+"yourname"
