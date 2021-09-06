@@ -42,3 +42,8 @@ client<----------(http response)---------server #使用key1加密
   |
 #使用key1解密得到内容
 #以上过程存在黑客冒充服务器通信漏洞.
+
+#生成自签証書.
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -out server.csr
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
