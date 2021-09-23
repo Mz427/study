@@ -1,8 +1,10 @@
 #configuration of ansible and hosts:
 #/etc/ansible/ansible.cfg
 #/etc/ansible/hosts OR ${HOME}/hosts
-ansible [-i] <host_file> [-m] <module> [-a] <command> <host> [--become] [--become-method=sudo] [--become-user=root]
-
+ansible-doc [-l] #List available plugins.
+ansible-doc [-s] <module_name> #Show playbook sinppet for specified plugin.
+ansible [-i] <host_file> [-m] <module> [-a] <command> <host>
+ansible-playbook [-v] <playbook>
 #Modules:
 #查看具體用法: ansible-doc module_name
     #遠程執行命令.
