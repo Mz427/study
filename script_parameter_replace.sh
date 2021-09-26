@@ -10,7 +10,7 @@ ${parameter:=word}
 ${parameter:?word}
 #如果parameter不为null或者未设置，则整个参数替换表达式值为word
 ${parameter:+word}
-#parameter的值的子字符串。
+#parameter的值的子字符串,从0開始。
 ${parameter:offset}
 ${parameter:offset:length}
 #从右算第offset到結尾length個字符.

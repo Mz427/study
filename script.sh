@@ -30,7 +30,7 @@ if test                 #表达式为真
 if test !               #表达式为假
 test 表达式1 –a 表达式2 #两个表达式都为真
 test 表达式1 –o 表达式2 #两个表达式有一个为真
-test 表达式1 !  表达式2 #条件求反
+test ! 表达式2          #条件求反
 
 #判断字符串
 test –n 字符串         #字符串的长度非零
@@ -333,9 +333,6 @@ expr1|expr2     匹配expr1或expr2
 
 #######################################  commands  #######################################
 
-#输出及修改时间
-date -d "1 day ago" "+%Y%m%d %H:%M:%S"
-date -s "20120528 10:56:34"
 #批量修改文件名称
 rename 's/\.jpg$/\.png/' *.jpg
 #更新locate数据庫
@@ -347,3 +344,6 @@ ssh-keygen -t ed25519
 ssh-copy-id user_id@ip
 #Ssh測試端口
 ssh -v -p {port} {username@ip}
+#分離路徑名和文件名.
+basename
+dirname
