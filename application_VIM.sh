@@ -66,7 +66,7 @@ vim -[o][O] {filename} #分屏打开多个文件:o水平O垂直.
     q{a-z}q #宏录制,共用registers寄存器.
     #使用:
     23@{a-z}       #normal模式多次执行.
-    :normal @{a-z} #多行执行.
+    :2,5 normal @{a-z} #多行执行.
 #自动补全:
     CTRL-N        #向上补全
     CTRL-P        #向上补全
