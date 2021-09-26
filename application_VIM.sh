@@ -1,6 +1,15 @@
 vim -[o][O] {filename} #分屏打开多个文件:o水平O垂直.
     :e[dit] filename
+#buffers:
+    :buffers | ls
+    :buffer buffer1
+    :bnext
+    :bprevious
+    :blast
+    :bfirst
+    :bclose
 #标签页:
+    :tabs
     :tabnew   [filename]
     :tabclose [filename]
     :tabn     [filename]
@@ -18,15 +27,9 @@ vim -[o][O] {filename} #分屏打开多个文件:o水平O垂直.
     Ctrl+w n   #打开一个新窗口（空文件）
     Ctrl+w o   #关闭出当前窗口之外的所有窗口
     Ctrl+w T   #当前窗口移动到新标签页
-    Ctrl+w h   #切换到左边窗口
-    Ctrl+w j   #切换到下边窗口
-    Ctrl+w k   #切换到上边窗口
-    Ctrl+w l   #切换到右边窗口
+    Ctrl+w [h][j][k][l] #切换工作窗口
     Ctrl+w w   #遍历切换窗口
-    Ctrl+w H   #向左移动当前窗口
-    Ctrl+w J   #向下移动当前窗口
-    Ctrl+w K   #向上移动当前窗口
-    Ctrl+w L   #向右移动当前窗口
+    Ctrl+w [H][J][K][L] #移动当前窗口
     Ctrl+w +   #增加窗口高度
     Ctrl+w -   #减小窗口高度
     Ctrl+w =   #统一窗口高度
@@ -65,8 +68,21 @@ vim -[o][O] {filename} #分屏打开多个文件:o水平O垂直.
 #macro 宏(normal):
     q{a-z}q #宏录制,共用registers寄存器.
     #使用:
-    23@{a-z}       #normal模式多次执行.
+    3@{a-z}       #normal模式多次执行.
     :2,5 normal @{a-z} #多行执行.
+#mark 标记(normal):
+    m [a-z] #当前缓存区有效.
+    m [A-Z] #全局有效.
+    '[a-z]  '#标记跳转.
+    `[a-z]  `#标记跳转.
+    d'[a-z] '#删除标记.
+    :marks
+# ! 与外部命令交换:
+    :! command        #暂时退出vim执行命令.
+    :r[ead] ! command #当前行之后读入命令输出内容.
+    :2,4 ! command    #将被选行作为标准输入执行命令，结果替换被选行.
+    :2,4 w ! command  #将被选行作为标准输入执行命令，结果显示在命令区.
+    :. w ! bash       #执行当前行,结果显示在命令区.
 #自动补全:
     CTRL-N        #向上补全
     CTRL-P        #向上补全
