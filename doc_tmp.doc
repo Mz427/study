@@ -2,25 +2,4 @@ magnet:?xt=urn:btih:5108d4c722015ca8186604636838e61798facf8d&website=bt%E5%A4%A9
 supergirl therapy
 https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E4%BD%9C%E6%B5%81
 
-if_int = "vether0"
-if_ext = "pppoe0"
-ip_windows = "10.9.7.72"
-table <martians> { 0.0.0.0/8 10.0.0.0/8 127.0.0.0/8 169.254.0.0/16 \
-    172.16.0.0/12 192.0.0.0/24 192.0.2.0/24 224.0.0.0/3            \
-    192.168.0.0/16 198.18.0.0/15 198.51.100.0/24 203.0.113.0/24 }
-
-set block-policy drop
-set loginterface egress
-set skip on lo0
-
-match in all scrub (no-df random-id max-mss 1440)
-match out on egress inet from !(egress:network) to any nat-to (egress:0)
-antispoof quick for { egress $if_int $if_ext }
-block in quick on egress from <martians> to any
-block return out quick on egress from any to <martians>
-block in quick on $if_int proto tcp from !$ip_windows to ($if_int) port ssh  
-block all
-
-pass out on egress from (egress) to any
-pass in on $if_int
-#pass in on egress inet proto tcp from any to (egress) port { 80 443 } rdr-to 192.168.1.2
+https://www.junmajinlong.com/linux/systemd/systemd_bootup/
