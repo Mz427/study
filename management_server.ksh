@@ -1,6 +1,9 @@
 ##########################################################################
 #                              UNIX System V
 ##########################################################################
+#开机启动流程：
+    BIOS-->groub(开机引导程序)-->/boot/kernel(加载核心)-->/sbin/init(pid 1)-->/etc/inittab(确定运行级别) \
+        -->/etc/rc.d/rc[0-6].d/daemon.script-->login
 #Service Script is in:
 	/etc/init.d/daemon.script
 	/etc/rc.d/rc[0-6].d/S__daemon--->/etc/init.d/daemon.script
