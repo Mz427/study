@@ -1,9 +1,5 @@
 podman search image_name
 podman pull image_name
-podman [start][stop][restart] container_name
-podman exec [OPTIONS] CONTAINER COMMAND [ARG...]
-podman exec -ti container_name /bin/bash
-podman ps [-a]
 podman run -d -t -i --privileged \
     --restart always \
     --name registry \
@@ -26,3 +22,8 @@ podman run -d \
     -e RABBITMQ_DEFAULT_USER=admin \
     -e RABBITMQ_DEFAULT_PASS=admin \
     rabbitmq:latest
+podman [start][stop][restart] container_name
+podman exec [OPTIONS] CONTAINER COMMAND [ARG...]
+podman exec -ti container_name /bin/bash
+podman ps [-a]
+podman cp container_id:/dir dest_dir/
