@@ -18,13 +18,11 @@
 
 #RPM linux
 #/etc/yum.repos.d/
-	yum list installed
-	         available
-		updates
+	dnf | yum list installed
+		update
 	    install
 	    reinstall
 	    localinstall
-	    upate
 	    remove
 	    erase #Rmove both config file.
 	    info
@@ -32,8 +30,8 @@
 
 #BSD pkg
 #set environment variable "PKG_PATH" or /etc/installurl.
-pkg_add -u unzip - updating packages
-pkg_add(1) - for installing and upgrading packages
-pkg_check(8) - for checking the consistency of installed packages
-pkg_delete(1) - for removing installed packages
-pkg_info(1) -Q - for displaying information about packages
+pkg_add [-u]     #updating packages
+pkg_add(1)       #installing and upgrading packages
+pkg_check(8)     #checking the consistency of installed packages
+pkg_delete(1)    #removing installed packages
+pkg_info(1) [-Q] #displaying information about packages
