@@ -1,0 +1,11 @@
+Ctrl + N[ew] / Ctrl + Shift + N[ew]   #Open new window / incognito window.
+Alt + F4                              #Close current window.
+
+Ctrl + T / Ctrl + Shift + T           #Open / restore tab.
+Alt + Tab / Ctrl + Tab / Ctrl + [1-9] #Change tab.
+Ctrl + W / Ctrl + F4                  #Close current tab.
+Alt + <- / Alt + ->                   #Forward / back.
+
+F5 / Ctrl + R                         #Refresh.
+F6                                    #Address Blank.
+F10                                   #Setting.
