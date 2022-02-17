@@ -31,3 +31,5 @@ ip neigh(bor) flush dev ens37 #刷新arp表.
 /etc/network/interfaces #Debian.
 
 #systemctl-networkd.service
+NetworkManager tools
+nmcli
