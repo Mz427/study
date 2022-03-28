@@ -78,8 +78,3 @@
 #Log:
     journalctl #List all log.   
     journalctl [-n 200][-f] #Like tail.
-
-#systemd-networkd.service:
-    networkctl
-#Set hostname.
-    hostnamectl set-hostname hostname

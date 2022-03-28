@@ -13,3 +13,5 @@ Program:    Nginx   Apache    tomcat
             flume/kafka
 Inspection: Ansible Zabbix    nagios     cobbler
 Tools:      vim     VScode    terminal   git/github
+################################################################
+python: fabric

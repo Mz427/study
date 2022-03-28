@@ -3,19 +3,37 @@
 #####################################################################################################################
 #Kubernetes consists of blow module:
 #Control-plane node(s):
-Protocol	Direction	Port Range	Purpose	                Used By
-TCP	        Inbound	    6443*	    Kubernetes API server	All
-TCP	        Inbound	    2379-2380   etcd server client API	kube-apiserver, etcd
-TCP	        Inbound	    10250	    kubelet API	            Self, Control plane
-TCP	        Inbound	    10251	    kube-scheduler	        Self
-TCP	        Inbound	    10252	    kube-controller-manager	Self
+Name                    Protocol Direction Port Range	Purpose	                Used By
+kube-apiserver          TCP      Inbound   6443*	    Kubernetes API server	All
+etcd                    TCP      Inbound   2379-2380    etcd server client API	kube-apiserver, etcd
+kubelet                 TCP      Inbound   10250	    kubelet API	            Self, Control plane
+kube-scheduler          TCP      Inbound   10251	    kube-scheduler	        Self
+kube-controller-manager TCP      Inbound   10252	    kube-controller-manager	Self
 #Worker node(s):
-Protocol	Direction	Port Range	Purpose	                Used By
-TCP	        Inbound	    10250	    kubelet API	            Self, Control plane
-TCP	        Inbound	    30000-32767	NodePort Services       All
+Name          Protocol Direction Port Range	 Purpose	       Used By
+kubelet       TCP      Inbound   10250	     kubelet API	   Self, Control plane
+kube-proxy    TCP      Inbound   30000-32767 NodePort Services All
+CRI-O         -        -         -           container runtime Self, other runtime:docker, containerd
 
 #####################################################################################################################
-#                                          Install step
+#                                          Install step(binary)
+#####################################################################################################################
+#Install Kubernetes master on Debian.
+#Install Kubernetes node on CentOS.
+#System required:
+2 CPU or more, 2GB or more RAM.
+#--1 (All machines require.)
+#Disable swap:
+swapoff -a #Or edit /etc/fstab.
+#Disable firewall:
+#Disable selinux:
+#--2 (Get required binary tar.)
+wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-amd64.tar.gz
+#https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.23.md#server-binaries
+wget https://dl.k8s.io/v1.23.5/kubernetes-server-linux-amd64.tar.gz
+
+#####################################################################################################################
+#                                          Install step(kubeadm)
 #####################################################################################################################
 #Install Kubernetes on debian10.
 #System required:

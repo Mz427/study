@@ -30,6 +30,10 @@ ip neigh(bor) flush dev ens37 #刷新arp表.
 /etc/sysconfig/network-scripts/ifcfg-ens32 #CentOS.
 /etc/network/interfaces #Debian.
 
-#systemctl-networkd.service
-NetworkManager tools
+#NetworkManager tools
 nmcli
+
+#systemd-networkd.service:
+    networkctl
+#Set hostname.
+    hostnamectl set-hostname hostname
