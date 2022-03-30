@@ -40,11 +40,11 @@ wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-
 wget https://dl.k8s.io/v1.23.5/kubernetes-server-linux-amd64.tar.gz
 
 #--3 Install etcd:
-mkdir -p /opt/etcd/{bin,etc,ssl}
+cd /opt
+mkdir -p etcd/{bin,etc,ssl}
 tar -xzv -f etcd-v3.5.2-linux-amd64.tar.gz
 cp etcd-v3.5.2-linux-amd64/etcd* /usr/local/bin/
-cp etcd-v3.5.2-linux-amd64/etcd* root@10.9.7.198:/usr/local/bin/
-cat > etcd.conf << EOF
+cat > etcd/etc/etcd.conf << EOF
 #[Member]
 ETCD_NAME="etcd-master1" #不同节点需要更改
 ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
@@ -53,7 +53,7 @@ ETCD_LISTEN_CLIENT_URLS="https://10.9.7.199:2379" #不同节点需要更改
 #[Clustering]
 ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.9.7.199:2380" #不同节点需要更改
 ETCD_ADVERTISE_CLIENT_URLS="https://10.9.7.199:2379" #不同节点需要更改
-ETCD_INITIAL_CLUSTER="etcd-master1=https://10.9.7.199:2380,etcd-master2=https://10.9.7.198:2380,etcd-node1=https://10.9.7.197:2380,etcd-node2=https://10.9.7.196:2380"
+ETCD_INITIAL_CLUSTER="etcd-master1=https://10.9.7.199:2380,etcd-master2=https://10.9.7.198:2380"
 ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
 ETCD_INITIAL_CLUSTER_STATE="new"
 EOF
@@ -67,17 +67,8 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-EnvironmentFile=/opt/etcd/cfg/etcd.conf
-ExecStart=/opt/etcd/bin/etcd \
-    --name=${ETCD_NAME} \
-    --data-dir=${ETCD_DATA_DIR} \
-    --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
-    --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
-    --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
-    --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
-    --initial-cluster=${ETCD_INITIAL_CLUSTER} \
-    --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
-    --initial-cluster-state=new \
+EnvironmentFile=/opt/etcd/etc/etcd.conf
+ExecStart=/usr/local/bin/etcd \
     --cert-file=/opt/etcd/ssl/server.pem \
     --key-file=/opt/etcd/ssl/server-key.pem \
     --peer-cert-file=/opt/etcd/ssl/server.pem \
