@@ -21,12 +21,15 @@ CRI-O         -        -         -           container runtime Self, other runti
 #Install Kubernetes master on Debian.
 #Install Kubernetes node on CentOS.
 #System required:
-2 CPU or more, 2GB or more RAM.
+#2 CPU or more, 2GB or more RAM.
 #--1 (All machines require.)
 #Disable swap:
 swapoff -a #Or edit /etc/fstab.
 #Disable firewall:
+systemctl stop firewall
+systemctl disable firewall
 #Disable selinux:
+sed -i 
 #--2 (Get required binary tar.)
 wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-amd64.tar.gz
 #https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.23.md#server-binaries
