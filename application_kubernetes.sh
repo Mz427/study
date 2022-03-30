@@ -10,10 +10,10 @@ kubelet                 TCP      Inbound   10250	    kubelet API	            Sel
 kube-scheduler          TCP      Inbound   10251	    kube-scheduler	        Self
 kube-controller-manager TCP      Inbound   10252	    kube-controller-manager	Self
 #Worker node(s):
-Name          Protocol Direction Port Range	 Purpose	       Used By
-kubelet       TCP      Inbound   10250	     kubelet API	   Self, Control plane
-kube-proxy    TCP      Inbound   30000-32767 NodePort Services All
-CRI-O         -        -         -           container runtime Self, other runtime:docker, containerd
+Name                    Protocol Direction Port Range	 Purpose	            Used By
+kubelet                 TCP      Inbound   10250	     kubelet API	        Self, Control plane
+kube-proxy              TCP      Inbound   30000-32767   NodePort Services      All
+CRI-O                   -        -         -             container runtime      Self, other runtime: docker, containerd
 
 #####################################################################################################################
 #                                          Install step(binary)
@@ -22,20 +22,83 @@ CRI-O         -        -         -           container runtime Self, other runti
 #Install Kubernetes node on CentOS.
 #System required:
 #2 CPU or more, 2GB or more RAM.
-#--1 (All machines require.)
+
+#--1 Preparation(All machines require.)
 #Disable swap:
 swapoff -a #Or edit /etc/fstab.
 #Disable firewall:
 systemctl stop firewall
 systemctl disable firewall
 #Disable selinux:
-sed -i 's/^SELINUX=.\*/SELINUX=disabled/' /etc/selinux/config
+sed -i 's/^SELINUX=.\*/SELINUX=disabled/' /etc/selinux/config #Or edit /etc/selinux/config.
 #Set system time:
 timedatectl
-#--2 (Get required binary tar.)
+
+#--2 Get required binary tar:
 wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-amd64.tar.gz
 #https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.23.md#server-binaries
 wget https://dl.k8s.io/v1.23.5/kubernetes-server-linux-amd64.tar.gz
+
+#--3 Install etcd:
+mkdir -p /opt/etcd/{bin,etc,ssl}
+tar -xzv -f etcd-v3.5.2-linux-amd64.tar.gz
+cp etcd-v3.5.2-linux-amd64/etcd* /usr/local/bin/
+cp etcd-v3.5.2-linux-amd64/etcd* root@10.9.7.198:/usr/local/bin/
+cat > etcd.conf << EOF
+#[Member]
+ETCD_NAME="etcd-master1" #不同节点需要更改
+ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
+ETCD_LISTEN_PEER_URLS="https://10.9.7.199:2380" #不同节点需要更改
+ETCD_LISTEN_CLIENT_URLS="https://10.9.7.199:2379" #不同节点需要更改
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.9.7.199:2380" #不同节点需要更改
+ETCD_ADVERTISE_CLIENT_URLS="https://10.9.7.199:2379" #不同节点需要更改
+ETCD_INITIAL_CLUSTER="etcd-master1=https://10.9.7.199:2380,etcd-master2=https://10.9.7.198:2380,etcd-node1=https://10.9.7.197:2380,etcd-node2=https://10.9.7.196:2380"
+ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
+ETCD_INITIAL_CLUSTER_STATE="new"
+EOF
+
+cat > /usr/lib/systemd/system/etcd.service << EOF
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=/opt/etcd/cfg/etcd.conf
+ExecStart=/opt/etcd/bin/etcd \
+    --name=${ETCD_NAME} \
+    --data-dir=${ETCD_DATA_DIR} \
+    --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
+    --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
+    --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
+    --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+    --initial-cluster=${ETCD_INITIAL_CLUSTER} \
+    --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
+    --initial-cluster-state=new \
+    --cert-file=/opt/etcd/ssl/server.pem \
+    --key-file=/opt/etcd/ssl/server-key.pem \
+    --peer-cert-file=/opt/etcd/ssl/server.pem \
+    --peer-key-file=/opt/etcd/ssl/server-key.pem \
+    --trusted-ca-file=/opt/etcd/ssl/ca.pem \
+    --peer-trusted-ca-file=/opt/etcd/ssl/ca.pem
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#Create CA.
+openssl
+
+systemctl enable etcd
+systemctl start etcd
+
+#--4 Install kubernetes(master1,2):
+tar -xzv -f kubernetes-server-linux-amd64.tar.gz
 
 #####################################################################################################################
 #                                          Install step(kubeadm)
@@ -83,9 +146,6 @@ curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
 apt-get update
 apt-get install -y kubectl kubeadm [kubelet]
 
-#####################################################################################################################
-#                                          Setup cluster
-#####################################################################################################################
 #Create the actual cluster:
 #k8s.gcr.io
 crictl pull coredns/coredns:1.8.0
