@@ -29,7 +29,9 @@ swapoff -a #Or edit /etc/fstab.
 systemctl stop firewall
 systemctl disable firewall
 #Disable selinux:
-sed -i 
+sed -i 's/^SELINUX=.\*/SELINUX=disabled/' /etc/selinux/config
+#Set system time:
+timedatectl
 #--2 (Get required binary tar.)
 wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-amd64.tar.gz
 #https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.23.md#server-binaries
