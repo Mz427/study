@@ -45,7 +45,7 @@ client<----------(http response)---------server #使用key1加密
 
 #生成根証書.
 openssl genrsa -out ca.key 2048
-openssl req -x509 -new -nodes -key ca.key -subj "/CN=10.9.7.199" -days 365 -out ca.crt
+openssl req -x509 -new -nodes -key ca.key -subj "/CN=master1.my.domain" -days 365 -out ca.crt
 
 #Create a config file for generating a Certificate Signing Request (CSR).
 cat > csr.conf << EOF
@@ -57,24 +57,24 @@ req_extensions = req_ext
 distinguished_name = dn
 
 [ dn ]
-C = <country>
-ST = <state>
-L = <city>
-O = <organization>
-OU = <organization unit>
-CN = <MASTER_IP>
+C = CN
+ST = SX
+L = LL
+O = GS
+OU = HLW
+CN = 10.9.7.199
 
 [ req_ext ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = kubernetes
-DNS.2 = kubernetes.default
-DNS.3 = kubernetes.default.svc
-DNS.4 = kubernetes.default.svc.cluster
-DNS.5 = kubernetes.default.svc.cluster.local
-IP.1 = <MASTER_IP>
-IP.2 = <MASTER_CLUSTER_IP>
+DNS.1 = MzHost.my.domain
+IP.1 = 10.9.7.199
+IP.2 = 10.9.7.198
+IP.3 = 10.9.7.197
+IP.4 = 10.9.7.196
+IP.5 = 10.9.7.195
+IP.6 = 10.9.7.194
 
 [ v3_ext ]
 authorityKeyIdentifier=keyid,issuer:always

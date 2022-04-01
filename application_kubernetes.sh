@@ -27,8 +27,8 @@ CRI-O                   -        -         -             container runtime      
 #Disable swap:
 swapoff -a #Or edit /etc/fstab.
 #Disable firewall:
-systemctl stop firewall
-systemctl disable firewall
+systemctl stop firewalld
+systemctl disable firewalld
 #Disable selinux:
 sed -i 's/^SELINUX=.\*/SELINUX=disabled/' /etc/selinux/config #Or edit /etc/selinux/config.
 #Set system time:
@@ -69,12 +69,21 @@ Wants=network-online.target
 Type=notify
 EnvironmentFile=/opt/etcd/etc/etcd.conf
 ExecStart=/usr/local/bin/etcd \
-    --cert-file=/opt/etcd/ssl/server.pem \
-    --key-file=/opt/etcd/ssl/server-key.pem \
-    --peer-cert-file=/opt/etcd/ssl/server.pem \
-    --peer-key-file=/opt/etcd/ssl/server-key.pem \
-    --trusted-ca-file=/opt/etcd/ssl/ca.pem \
-    --peer-trusted-ca-file=/opt/etcd/ssl/ca.pem
+    --name=${ETCD_NAME} \
+    --data-dir=${ETCD_DATA_DIR} \
+    --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
+    --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
+    --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
+    --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+    --initial-cluster=${ETCD_INITIAL_CLUSTER} \
+    --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
+    --initial-cluster-state=new \
+    --cert-file=/opt/etcd/ssl/server.crt \
+    --key-file=/opt/etcd/ssl/server.key \
+    --peer-cert-file=/opt/etcd/ssl/server.crt \
+    --peer-key-file=/opt/etcd/ssl/server.key \
+    --trusted-ca-file=/opt/etcd/ssl/ca.crt \
+    --peer-trusted-ca-file=/opt/etcd/ssl/ca.crt
 Restart=on-failure
 LimitNOFILE=65536
 
