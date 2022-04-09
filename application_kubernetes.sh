@@ -39,66 +39,16 @@ wget https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-
 #https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.23.md#server-binaries
 wget https://dl.k8s.io/v1.23.5/kubernetes-server-linux-amd64.tar.gz
 
-#--3 Install etcd:
-cd /opt
-mkdir -p etcd/{bin,etc,ssl}
-tar -xzv -f etcd-v3.5.2-linux-amd64.tar.gz
-cp etcd-v3.5.2-linux-amd64/etcd* /usr/local/bin/
-cat > etcd/etc/etcd.conf << EOF
-#[Member]
-ETCD_NAME="etcd-master1" #不同节点需要更改
-ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
-ETCD_LISTEN_PEER_URLS="https://10.9.7.199:2380" #不同节点需要更改
-ETCD_LISTEN_CLIENT_URLS="https://10.9.7.199:2379" #不同节点需要更改
-#[Clustering]
-ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.9.7.199:2380" #不同节点需要更改
-ETCD_ADVERTISE_CLIENT_URLS="https://10.9.7.199:2379" #不同节点需要更改
-ETCD_INITIAL_CLUSTER="etcd-master1=https://10.9.7.199:2380,etcd-master2=https://10.9.7.198:2380"
-ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
-ETCD_INITIAL_CLUSTER_STATE="new"
-EOF
+#--3 Install etcd(all master machines):
+#See application_etcd.sh.
 
-cat > /usr/lib/systemd/system/etcd.service << EOF
-[Unit]
-Description=Etcd Server
-After=network.target
-After=network-online.target
-Wants=network-online.target
+#--4 Create ssl certificate for etcd:
+#See book_https_CA.sh.
 
-[Service]
-Type=notify
-EnvironmentFile=/opt/etcd/etc/etcd.conf
-ExecStart=/usr/local/bin/etcd \
-    --name=${ETCD_NAME} \
-    --data-dir=${ETCD_DATA_DIR} \
-    --listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
-    --listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
-    --advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
-    --initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
-    --initial-cluster=${ETCD_INITIAL_CLUSTER} \
-    --initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
-    --initial-cluster-state=new \
-    --cert-file=/opt/etcd/ssl/server.crt \
-    --key-file=/opt/etcd/ssl/server.key \
-    --peer-cert-file=/opt/etcd/ssl/server.crt \
-    --peer-key-file=/opt/etcd/ssl/server.key \
-    --trusted-ca-file=/opt/etcd/ssl/ca.crt \
-    --peer-trusted-ca-file=/opt/etcd/ssl/ca.crt
-Restart=on-failure
-LimitNOFILE=65536
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-#Create CA.
-openssl
-
-systemctl enable etcd
-systemctl start etcd
-
-#--4 Install kubernetes(master1,2):
+#--5 Install kubernetes(master1,2):
 tar -xzv -f kubernetes-server-linux-amd64.tar.gz
+
+#--6 Create ssl certificate for kubernetes:
 
 #####################################################################################################################
 #                                          Install step(kubeadm)
