@@ -5,14 +5,15 @@
 #Control-plane node(s):
 Name                    Protocol Direction Port Range	Purpose	                Used By
 kube-apiserver          TCP      Inbound   6443*	    Kubernetes API server	All
-etcd                    TCP      Inbound   2379-2380    etcd server client API	kube-apiserver, etcd
 kubelet                 TCP      Inbound   10250	    kubelet API	            Self, Control plane
 kube-scheduler          TCP      Inbound   10251	    kube-scheduler	        Self
 kube-controller-manager TCP      Inbound   10252	    kube-controller-manager	Self
+etcd                    TCP      Inbound   2379-2380    etcd server client API	kube-apiserver, etcd
 #Worker node(s):
 Name                    Protocol Direction Port Range	 Purpose	            Used By
 kubelet                 TCP      Inbound   10250	     kubelet API	        Self, Control plane
 kube-proxy              TCP      Inbound   30000-32767   NodePort Services      All
+network plugins
 CRI-O                   -        -         -             container runtime      Self, other runtime: docker, containerd
 
 #####################################################################################################################
@@ -45,10 +46,14 @@ wget https://dl.k8s.io/v1.23.5/kubernetes-server-linux-amd64.tar.gz
 #--4 Create ssl certificate for etcd:
 #See book_https_CA.sh.
 
-#--5 Install kubernetes(master1,2):
+#--5 Install cni plugins(all node machines):
+
+#--6 Install flannel(all node machines):
+
+#--7 Install kubernetes(master1,2):
 tar -xzv -f kubernetes-server-linux-amd64.tar.gz
 
-#--6 Create ssl certificate for kubernetes:
+#--8 Create ssl certificate for kubernetes:
 
 #####################################################################################################################
 #                                          Install step(kubeadm)
