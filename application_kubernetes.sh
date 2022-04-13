@@ -5,7 +5,6 @@
 #Control-plane node(s):
 Name                    Protocol Direction Port Range	Purpose	                Used By
 kube-apiserver          TCP      Inbound   6443*	    Kubernetes API server	All
-kubelet                 TCP      Inbound   10250	    kubelet API	            Self, Control plane
 kube-scheduler          TCP      Inbound   10251	    kube-scheduler	        Self
 kube-controller-manager TCP      Inbound   10252	    kube-controller-manager	Self
 etcd                    TCP      Inbound   2379-2380    etcd server client API	kube-apiserver, etcd
@@ -13,7 +12,7 @@ etcd                    TCP      Inbound   2379-2380    etcd server client API	k
 Name                    Protocol Direction Port Range	 Purpose	            Used By
 kubelet                 TCP      Inbound   10250	     kubelet API	        Self, Control plane
 kube-proxy              TCP      Inbound   30000-32767   NodePort Services      All
-network plugins
+CNI plugins
 CRI-O                   -        -         -             container runtime      Self, other runtime: docker, containerd
 
 #####################################################################################################################

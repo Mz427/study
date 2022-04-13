@@ -69,12 +69,13 @@ subjectAltName = @alt_names
 
 [ alt_names ]
 DNS.1 = MzHost.my.domain
-IP.1 = 10.9.7.199
-IP.2 = 10.9.7.198
-IP.3 = 10.9.7.197
-IP.4 = 10.9.7.196
-IP.5 = 10.9.7.195
-IP.6 = 10.9.7.194
+IP.1 = 10.9.7.200
+IP.2 = 10.9.7.199
+IP.3 = 10.9.7.198
+IP.4 = 10.9.7.197
+IP.5 = 10.9.7.196
+IP.6 = 10.9.7.195
+IP.7 = 10.9.7.194
 
 [ v3_ext ]
 authorityKeyIdentifier=keyid,issuer:always
