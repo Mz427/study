@@ -2,10 +2,12 @@ cat > /opt/kubernetes/etc/kube-apiserver.conf << EOF
 --advertise-address=172.16.210.53 \\
 --allow-privileged=true \\
 --authorization-mode=RBAC,Node \\
+
 --audit-log-maxage=30 \\
 --audit-log-maxbackup=3 \\
 --audit-log-maxsize=100 \\
 --audit-log-path=/opt/kubernetes/logs/k8s-audit.log"
+
 --bind-address=172.16.210.53 \\
 --client-ca-file=/opt/kubernetes/ssl/ca.pem \\
 
