@@ -59,22 +59,30 @@
 	active(waiting)
 	inactive
 #Crontrol unit:
-	systemctl start/stop/restart/status/reload/enable/disable/mask/is-active/is-enabled unit
-#Manage unit:
+	systemctl start|stop|restart|status|kill|reload|enable|disable|mask unit_name
 	systemctl #List all started units.
-	systemctl list-unit-file [unit] #List all installed units.
-    systemctl list-units [--type=service] [--all] #List specific type of units(active).
-	systemctl list-dependencies [unit] [--reverse]
+	systemctl list-unit-files #List all installed units.
+    systemctl list-units [--type=service] [--state=inactive] [--failed] [--all] #List specific type of units(default: active).
+    systemctl is-active|is-enabled|is-failed
+	systemctl list-dependencies [unit_name] [--reverse]
 	systemctl list-sockets
+    systemctl daemon-reload
+#Crontrol target:
 	systemctl get-default
 	systemctl set-default daemon.target
 	systemctl isolate daemon.target #Switch target.
+#查看服務启動耗時:
+    systemctl-analyze
 #重启/關機:
-    systemctl [reboot] [poweroff]
+    systemctl [reboot] [poweroff] [rescue]
 
 ##########################################################################
 #                            Systemd-units
 ##########################################################################
+##########################################################################
+#                            Journalctl
+##########################################################################
 #Log:
     journalctl #List all log.   
-    journalctl [-n 200][-f] #Like tail.
+    journalctl -k #List kernel log.   
+    journalctl [-n 200] [-f] [--unit=unit_name] [--since="2022-05-07 05:45:00"] [--until="2022-05-07 05:45:00"] #Like tail.

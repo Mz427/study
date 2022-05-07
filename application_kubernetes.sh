@@ -51,6 +51,30 @@ wget https://dl.k8s.io/v1.23.5/kubernetes-server-linux-amd64.tar.gz
 
 #--7 Install kubernetes(master1,2):
 tar -xzv -f kubernetes-server-linux-amd64.tar.gz
+# admin set cluster
+kubectl config set-cluster MyKubernetes \
+    --certificate-authority=/opt/kubernetes/ssl/ca.crt \
+    --embed-certs=true \
+    --server=127.0.0.1 \
+    --kubeconfig=/opt/kubernetes/etc/admin.kubeconfig
+
+# admin set credentials
+kubectl config set-credentials kubernetes-admin \
+    --client-certificate=admin.pem \
+    --client-key=admin-key.pem \
+    --embed-certs=true \
+    --kubeconfig=/opt/kubernetes/etc/admin.kubeconfig
+
+# admin set context
+kubectl config set-context kubernetes-admin@kubernetes \
+    --cluster=kubernetes \
+    --user=kubernetes-admin \
+    --kubeconfig=../admin.kubeconfig
+
+# admin set default context
+kubectl config use-context kubernetes-admin@kubernetes \
+    --kubeconfig=../admin.kubeconfig
+
 
 #--8 Create ssl certificate for kubernetes:
 
