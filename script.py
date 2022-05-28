@@ -1,7 +1,7 @@
 py[thon] --version
 py[thon] -m pip list #query installed packages.
-py[thon] -m pip --upgrade pip
-py[thon] -m pip install
+py[thon] -m pip install --upgrade pip
+py[thon] -m pip install name
 
 #String variable.
 string1="myname"
@@ -27,3 +27,12 @@ for expression:
 	expression
 
 range(2, 5)
+
+#Database
+#Postgresql
+psycopg
+pip install psycopg[binary,pool]
+#mysql
+pymsql
+#sybase
+sqlanydb
