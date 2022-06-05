@@ -4,6 +4,12 @@ _                匹配一个任意字符
 [abc]            匹配abc中的任意單個字符
 [^abc] or [!abc] 匹配除abc外的任意單個字符
 
+/* \? List system command. */
+/* \h List SQL command. */
+create user with password = '123456'
+create database mzdb with owner = mz;
+create schema mz_test;
+
 create table mz_test.Product 
 (
 	product_id char(4) not null,
