@@ -4,8 +4,8 @@ py[thon] -m pip install --upgrade pip
 py[thon] -m pip install name
 
 #String variable.
-string1="myname"
-string2=string1+"yourname"
+string1 = "myname"
+string2 = string1 + "yourname"
 string1[1]
 string1[-1]
 string1[1:3]
@@ -28,11 +28,14 @@ for expression:
 
 range(2, 5)
 
-#Database
+###############################################modules##############################################
 #Postgresql
-psycopg
-pip install psycopg[binary,pool]
+psycopg2
 #mysql
 pymsql
 #sybase
 sqlanydb
+#excel
+openpyxl
+#date
+datetime
