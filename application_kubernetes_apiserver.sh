@@ -13,15 +13,6 @@
 # –logtostderr: 启用日志
 # —v: 日志等级
 # –log-dir: 日志目录
-#
-# 温馨提示: 在 1.23.* 版本之后请勿使用如下参数。
-# --enable-swagger-ui has been deprecated,
-# --insecure-port has been deprecated,
-# --alsologtostderr has been deprecated,
-# --logtostderr has been deprecated,
-# --log-dir has been deprecated,
-# TTLAfterFinished=true.
-# will be removed in a future release.
 
 cat > /usr/lib/systemd/system/kube-apiserver.service << EOF
 [Unit]
@@ -30,60 +21,60 @@ Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 After=network.target
 
 [Service]
-WorkingDirectory=/data/k8s/k8s/kube-apiserver
-ExecStart=/data/k8s/bin/kube-apiserver \
+ExecStart=/usr/bin/kube-apiserver \
   --advertise-address=##NODE_IP## \
+  --apiserver-count=3 \
+  --bind-address=##NODE_IP## \
+  --client-ca-file=/opt/kubernetes/ssl/ca.crt \
+  --enable-bootstrap-token-auth \
+  --token-auth-file=/opt/kubernetes/etc/token.csv \
+  --etcd-cafile=/opt/etcd/ssl/ca.crt \
+  --etcd-certfile=/opt/etcd/ssl/server.crt \
+  --etcd-keyfile=/opt/etcd/ssl/server.key \
+  --etcd-servers=https://10.9.7.200:2379,https://10.9.7.199:2379,https://10.9.7.198:2379 \
+  --kubelet-certificate-authority=/opt/kubernetes/ssl/ca.crt \
+  --kubelet-client-certificate=/opt/kubernetes/ssl/server.crt \
+  --kubelet-client-key=/opt/kubernetes/ssl/server.key \
+  --kubelet-https=true \
+  --kubelet-timeout=10s \
+  --proxy-client-cert-file=/opt/kubernetes/ssl/server.crt \
+  --proxy-client-key-file=/opt/kubernetes/ssl/server.key \
+  --service-cluster-ip-range=192.168.1.0/24 \
+  --service-node-port-range=1024-32767 \
+  --secure-port=6443 \
+  --insecure-port=0 \
+  --tls-cert-file=/opt/kubernetes/ssl/server.crt \
+  --tls-private-key-file=/opt/kubernetes/ssl/server.key \
+  --logtostderr=true \
+  --v=2 \
   --default-not-ready-toleration-seconds=360 \
   --default-unreachable-toleration-seconds=360 \
+  --default-watch-cache-size=200 \
+  --delete-collection-workers=2 \
   --feature-gates=DynamicAuditing=true \
   --max-mutating-requests-inflight=2000 \
   --max-requests-inflight=4000 \
-  --default-watch-cache-size=200 \
-  --delete-collection-workers=2 \
-  --encryption-provider-config=/etc/kubernetes/encryption-config.yaml \
-  --etcd-cafile=/etc/kubernetes/cert/ca.pem \
-  --etcd-certfile=/etc/kubernetes/cert/kubernetes.pem \
-  --etcd-keyfile=/etc/kubernetes/cert/kubernetes-key.pem \
-  --etcd-servers=https://etcd01.k8s.vip:2379,https://etcd02.k8s.vip:2379,https://etcd03.k8s.vip:2379 \
-  --bind-address=##NODE_IP## \
-  --secure-port=6443 \
-  --tls-cert-file=/etc/kubernetes/cert/kubernetes.pem \
-  --tls-private-key-file=/etc/kubernetes/cert/kubernetes-key.pem \
-  --insecure-port=0 \
+  --encryption-provider-config=/opt/kubernetes/etc/encryption-config.yaml \
   --audit-dynamic-configuration \
   --audit-log-maxage=15 \
   --audit-log-maxbackup=3 \
   --audit-log-maxsize=100 \
   --audit-log-truncate-enabled \
-  --audit-log-path=/data/k8s/k8s/kube-apiserver/audit.log \
-  --audit-policy-file=/etc/kubernetes/audit-policy.yaml \
+  --audit-log-path=/opt/kubernetes/log/audit.log \
+  --audit-policy-file=/opt/kubernetes/etc/audit-policy.yaml \
   --profiling \
   --anonymous-auth=false \
-  --client-ca-file=/etc/kubernetes/cert/ca.pem \
-  --enable-bootstrap-token-auth \
   --requestheader-allowed-names="aggregator" \
   --requestheader-client-ca-file=/etc/kubernetes/cert/ca.pem \
   --requestheader-extra-headers-prefix="X-Remote-Extra-" \
   --requestheader-group-headers=X-Remote-Group \
   --requestheader-username-headers=X-Remote-User \
-  --service-account-key-file=/etc/kubernetes/cert/ca.pem \
+  --service-account-key-file=/opt/kubernetes/ssl/ca.crt \
   --authorization-mode=Node,RBAC \
   --runtime-config=api/all=true \
   --enable-admission-plugins=NodeRestriction \
   --allow-privileged=true \
-  --apiserver-count=3 \
   --event-ttl=168h \
-  --kubelet-certificate-authority=/etc/kubernetes/cert/ca.pem \
-  --kubelet-client-certificate=/etc/kubernetes/cert/kubernetes.pem \
-  --kubelet-client-key=/etc/kubernetes/cert/kubernetes-key.pem \
-  --kubelet-https=true \
-  --kubelet-timeout=10s \
-  --proxy-client-cert-file=/etc/kubernetes/cert/proxy-client.pem \
-  --proxy-client-key-file=/etc/kubernetes/cert/proxy-client-key.pem \
-  --service-cluster-ip-range=10.254.0.0/16 \
-  --service-node-port-range=1024-32767 \
-  --logtostderr=true \
-  --v=2
 Restart=on-failure
 RestartSec=10
 Type=notify
